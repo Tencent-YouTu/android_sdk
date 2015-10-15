@@ -2,27 +2,29 @@ package com.youtu;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.VisibleForTesting;
 import android.util.Base64;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import com.youtu.sign.Base64Util;
+import com.youtu.sign.YoutuSign;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-import com.youtu.sign.*;
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -473,7 +475,7 @@ public class Youtu {
 		data.put("image", imageData);
 
 		data.put("person_id", person_id);
-		data.put("group_ids", group_ids);
+		data.put("group_ids", new JSONArray(group_ids));
 
 		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/newperson"):SendHttpsRequest(data, "api/newperson");
 
@@ -486,7 +488,7 @@ public class Youtu {
 		data.put("url", url);
 
 		data.put("person_id", person_id);
-		data.put("group_ids", group_ids);
+		data.put("group_ids", new JSONArray(group_ids));
 
 		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/newperson"):SendHttpsRequest(data, "api/newperson");
 
@@ -515,7 +517,7 @@ public class Youtu {
 			images.add(imageData);
 		}
 
-		data.put("images", images);
+		data.put("images", new JSONArray(images));
 
 		data.put("person_id", person_id);
 
@@ -528,7 +530,7 @@ public class Youtu {
 	throws IOException, JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 		
-		data.put("urls", url_arr);
+		data.put("urls", new JSONArray(url_arr));
 		data.put("person_id", person_id);
 
 		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/addface"):SendHttpsRequest(data, "api/addface");
@@ -541,7 +543,7 @@ public class Youtu {
 
 		JSONObject data = new JSONObject();
 
-		data.put("face_ids", face_id_arr);
+		data.put("face_ids", new JSONArray(face_id_arr));
 		data.put("person_id", person_id);
 		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/delface"):SendHttpsRequest(data, "api/delface");
 
