@@ -41,14 +41,14 @@ public class HttpsUtil {
     }
  
     /**
-     * post·½Ê½ÇëÇó·şÎñÆ÷(httpsĞ­Òé)
+     * postæ–¹å¼è¯·æ±‚æœåŠ¡å™¨(httpsåè®®)
      * 
      * @param url
-     *            ÇëÇóµØÖ·
+     *            è¯·æ±‚åœ°å€
      * @param content
-     *            ²ÎÊı
+     *            å‚æ•°
      * @param charset
-     *            ±àÂë
+     *            ç¼–ç 
      * @return
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
@@ -69,7 +69,7 @@ public class HttpsUtil {
         conn.connect();
         DataOutputStream out = new DataOutputStream(conn.getOutputStream());
         out.write(content.getBytes(charset));
-        // Ë¢ĞÂ¡¢¹Ø±Õ
+        // Ë¢ï¿½Â¡ï¿½ï¿½Ø±ï¿½
         out.flush();
         out.close();
         InputStream is = conn.getInputStream();

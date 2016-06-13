@@ -5,15 +5,15 @@ import java.util.Random;
 public class YoutuSign {
 
 	/**
-	    app_sign    Ê±Ğ§ĞÔÇ©Ãû
-	    @param  appId       http://open.youtu.qq.com/ÉÏÉêÇëµÄÒµÎñID
-	    @param  secret_id   http://open.youtu.qq.com/ÉÏÉêÇëµÄÃÜÔ¿id
-	    @param  secret_key  http://open.youtu.qq.com/ÉÏÉêÇëµÄÃÜÔ¿key
-	    @param  expired     Ç©Ãû¹ıÆÚÊ±¼ä
-	    @param  userid      ÒµÎñÕËºÅÏµÍ³,Ã»ÓĞ¿ÉÒÔ²»Ìî
-	    @param  mySign      Éú³ÉµÄÇ©Ãû
-            @return 0±íÊ¾³É¹¦
-    */
+	 *app_sign    æ—¶æ•ˆæ€§ç­¾å
+	 *@param  appId       http://open.youtu.qq.com/ä¸Šç”³è¯·çš„ä¸šåŠ¡ID
+	 *@param  secret_id   http://open.youtu.qq.com/ä¸Šç”³è¯·çš„å¯†é’¥id
+	 *@param  secret_key  http://open.youtu.qq.com/ä¸Šç”³è¯·çš„å¯†é’¥key
+	 *@param  expired     ç­¾åè¿‡æœŸæ—¶é—´
+	 *@param  userid      ä¸šåŠ¡è´¦å·ç³»ç»Ÿ,æ²¡æœ‰å¯ä»¥ä¸å¡«
+	 *@param  mySign      ç”Ÿæˆçš„ç­¾å
+	 *@return 0è¡¨ç¤ºæˆåŠŸ
+	 */
 	public static int appSign(String appId, String secret_id, String secret_key,
 			long expired, String userid, StringBuffer mySign) {
 		return appSignBase(appId, secret_id, secret_key, expired, "3041722595", null, mySign);

@@ -70,7 +70,7 @@ public class Youtu {
 	private String m_secret_id;
 	private String m_secret_key;
 	private String m_end_point;
-	private boolean m_use_youtu;
+	private boolean m_use_https;
 	
 	/**
 	 * PicCloud 构造方法
@@ -86,8 +86,8 @@ public class Youtu {
 		m_appid = appid;
 		m_secret_id = secret_id;
 		m_secret_key = secret_key;
-		m_end_point=end_point;
-		m_use_youtu=!end_point.startsWith("https");
+		m_end_point= end_point;
+		m_use_https = end_point.startsWith("https");
 	}
 	
 	public String StatusText(int status) {
@@ -330,6 +330,11 @@ public class Youtu {
 		return respose;
 	}
 
+	private JSONObject SendRequest(JSONObject postData, String method)
+			throws IOException, JSONException, KeyManagementException, NoSuchAlgorithmException {
+		return m_use_https ? SendHttpsRequest(postData, method) : SendHttpRequest(postData, method);
+	}
+
 	
 	public JSONObject DetectFace(Bitmap bitmap,int mode) throws IOException,
 	JSONException, KeyManagementException, NoSuchAlgorithmException {
@@ -340,7 +345,7 @@ public class Youtu {
 		data.put("image", imageData);
 		data.put("mode", mode);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/detectface"):SendHttpsRequest(data, "api/detectface");
+		JSONObject respose = SendRequest(data, "api/detectface");
 
 		return respose;
 	}
@@ -352,8 +357,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 		data.put("url", url);
 		data.put("mode", mode);
-		JSONObject respose = m_use_youtu ? SendHttpRequest(data, "api/detectface")
-		: SendHttpsRequest(data, "api/detectface");
+		JSONObject respose = SendRequest(data, "api/detectface");
 
 		return respose;
 	}
@@ -367,7 +371,7 @@ public class Youtu {
 		String imageData = bitmapToBase64(bitmap);
 		data.put("image", imageData);
 		data.put("mode", mode);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceshape"):SendHttpsRequest(data, "api/faceshape");
+		JSONObject respose = SendRequest(data, "api/faceshape");
 
 		return respose;
 	}
@@ -378,7 +382,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 		data.put("url", url);
 		data.put("mode", mode);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceshape"):SendHttpsRequest(data, "api/faceshape");
+		JSONObject respose = SendRequest(data, "api/faceshape");
 
 		return respose;
 	}
@@ -393,7 +397,7 @@ public class Youtu {
 		imageData = bitmapToBase64(bitmapB);
 		data.put("imageB", imageData);
 		
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/facecompare"):SendHttpsRequest(data, "api/facecompare");
+		JSONObject respose = SendRequest(data, "api/facecompare");
 
 		return respose;
 	}
@@ -406,7 +410,7 @@ public class Youtu {
 		data.put("urlA", urlA);
 		data.put("urlB", urlB);
 		
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/facecompare"):SendHttpsRequest(data, "api/facecompare");
+		JSONObject respose = SendRequest(data, "api/facecompare");
 
 		return respose;
 	}
@@ -421,7 +425,7 @@ public class Youtu {
 
 		data.put("person_id", person_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceverify"):SendHttpsRequest(data, "api/faceverify");
+		JSONObject respose = SendRequest(data, "api/faceverify");
 
 		return respose;
 	}
@@ -435,7 +439,7 @@ public class Youtu {
 
 		data.put("person_id", person_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceverify"):SendHttpsRequest(data, "api/faceverify");
+		JSONObject respose = SendRequest(data, "api/faceverify");
 
 		return respose;
 	}
@@ -450,7 +454,7 @@ public class Youtu {
 
 		data.put("group_id", group_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceidentify"):SendHttpsRequest(data, "api/faceidentify");
+		JSONObject respose = SendRequest(data, "api/faceidentify");
 
 		return respose;
 	}
@@ -461,7 +465,7 @@ public class Youtu {
 		data.put("url", url);
 		data.put("group_id", group_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceidentify"):SendHttpsRequest(data, "api/faceidentify");
+		JSONObject respose = SendRequest(data, "api/faceidentify");
 
 		return respose;
 	}
@@ -477,7 +481,7 @@ public class Youtu {
 		data.put("person_id", person_id);
 		data.put("group_ids", new JSONArray(group_ids));
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/newperson"):SendHttpsRequest(data, "api/newperson");
+		JSONObject respose = SendRequest(data, "api/newperson");
 
 		return respose;
 	}
@@ -490,7 +494,7 @@ public class Youtu {
 		data.put("person_id", person_id);
 		data.put("group_ids", new JSONArray(group_ids));
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/newperson"):SendHttpsRequest(data, "api/newperson");
+		JSONObject respose = SendRequest(data, "api/newperson");
 
 		return respose;
 	}
@@ -502,7 +506,7 @@ public class Youtu {
 
 		data.put("person_id", person_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/delperson"):SendHttpsRequest(data, "api/delperson");
+		JSONObject respose = SendRequest(data, "api/delperson");
 
 		return respose;
 	}
@@ -521,7 +525,7 @@ public class Youtu {
 
 		data.put("person_id", person_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/addface"):SendHttpsRequest(data, "api/addface");
+		JSONObject respose = SendRequest(data, "api/addface");
 
 		return respose;
 	}
@@ -533,7 +537,7 @@ public class Youtu {
 		data.put("urls", new JSONArray(url_arr));
 		data.put("person_id", person_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/addface"):SendHttpsRequest(data, "api/addface");
+		JSONObject respose = SendRequest(data, "api/addface");
 
 		return respose;
 	}
@@ -545,7 +549,7 @@ public class Youtu {
 
 		data.put("face_ids", new JSONArray(face_id_arr));
 		data.put("person_id", person_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/delface"):SendHttpsRequest(data, "api/delface");
+		JSONObject respose = SendRequest(data, "api/delface");
 
 		return respose;
 
@@ -557,7 +561,7 @@ public class Youtu {
 
 		data.put("person_name", person_name);
 		data.put("person_id", person_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/setinfo"):SendHttpsRequest(data, "api/setinfo");
+		JSONObject respose = SendRequest(data, "api/setinfo");
 
 		return respose;
 
@@ -568,7 +572,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("person_id", person_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/getinfo"):SendHttpsRequest(data, "api/getinfo");
+		JSONObject respose = SendRequest(data, "api/getinfo");
 
 		return respose;
 	}
@@ -576,7 +580,7 @@ public class Youtu {
 	public JSONObject GetGroupIds() throws IOException, JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/getgroupids"):SendHttpsRequest(data, "api/getgroupids");
+		JSONObject respose = SendRequest(data, "api/getgroupids");
 
 		return respose;
 	}
@@ -586,7 +590,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("group_id", group_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/getpersonids"):SendHttpsRequest(data, "api/getpersonids");
+		JSONObject respose = SendRequest(data, "api/getpersonids");
 
 		return respose;
 	}
@@ -596,7 +600,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("person_id", person_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/getfaceids"):SendHttpsRequest(data, "api/getfaceids");
+		JSONObject respose = SendRequest(data, "api/getfaceids");
 
 		return respose;
 	}
@@ -606,7 +610,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("face_id", face_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/getfaceinfo"):SendHttpsRequest(data, "api/getfaceinfo");
+		JSONObject respose = SendRequest(data, "api/getfaceinfo");
 
 		return respose;
 	}
@@ -620,7 +624,7 @@ public class Youtu {
 		String imageData = bitmapToBase64(bitmap);
 		data.put("image", imageData);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/fuzzydetect"):SendHttpsRequest(data, "imageapi/fuzzydetect");
+		JSONObject respose = SendRequest(data, "imageapi/fuzzydetect");
 
 		return respose;
 	}
@@ -630,7 +634,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("url", url);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/fuzzydetect"):SendHttpsRequest(data, "imageapi/fuzzydetect");
+		JSONObject respose = SendRequest(data, "imageapi/fuzzydetect");
 		return respose;
 	}
 
@@ -642,7 +646,7 @@ public class Youtu {
 		String imageData = bitmapToBase64(bitmap);
 		data.put("image", imageData);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/fooddetect"):SendHttpsRequest(data, "imageapi/fooddetect");
+		JSONObject respose = SendRequest(data, "imageapi/fooddetect");
 		return respose;
 	}
 
@@ -651,7 +655,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("url", url);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/fooddetect"):SendHttpsRequest(data, "imageapi/fooddetect");
+		JSONObject respose = SendRequest(data, "imageapi/fooddetect");
 		return respose;
 	}
 
@@ -664,7 +668,7 @@ public class Youtu {
 		String imageData = bitmapToBase64(bitmap);
 		data.put("image", imageData);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/imagetag"):SendHttpsRequest(data, "imageapi/imagetag");
+		JSONObject respose = SendRequest(data, "imageapi/imagetag");
 		return respose;
 	}
 
@@ -672,8 +676,67 @@ public class Youtu {
 	JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 		data.put("url", url);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/imagetag"):SendHttpsRequest(data, "imageapi/imagetag");
+		JSONObject respose = SendRequest(data, "imageapi/imagetag");
 		return respose;
+	}
+
+	public JSONObject ImagePorn(Bitmap bitmap) throws IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		String imageData = bitmapToBase64(bitmap);
+		data.put("image", imageData);
+		JSONObject respose = SendRequest(data, "imageapi/imageporn");
+		return respose;
+	}
+
+	public JSONObject ImagePornUrl(String url) throws IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("url", url);
+		JSONObject respose = SendRequest(data, "imageapi/imageporn");
+		return respose;
+	}
+
+
+
+	public JSONObject IdcardOcr(Bitmap bitmap, int cardType) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		String imageData = bitmapToBase64(bitmap);
+		data.put("image", imageData);
+		data.put("card_type", cardType);
+
+		JSONObject response = SendRequest(data, "ocrapi/idcardocr");
+		return response;
+	}
+
+	public JSONObject IdcardOcrUrl(String url, int cardType) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("url", url);
+		data.put("card_type", cardType);
+
+		JSONObject response = SendRequest(data, "ocrapi/idcardocr");
+		return response;
+	}
+
+	public JSONObject NamecardOcr(Bitmap bitmap) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		String imageData = bitmapToBase64(bitmap);
+		data.put("image", imageData);
+
+		JSONObject response = SendRequest(data, "ocrapi/namecardocr");
+		return response;
+	}
+
+	public JSONObject NamecardOcrUrl(String url) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("url", url);
+
+		JSONObject response = SendRequest(data, "ocrapi/namecardocr");
+		return response;
 	}
 
 

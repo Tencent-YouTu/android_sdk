@@ -2,6 +2,7 @@ package com.qq.youtu.youtuyundemo;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -9,7 +10,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,13 +25,18 @@ import com.youtu.Youtu;
 
 import org.json.JSONObject;
 
+import java.io.File;
+
 public class MainActivity extends Activity {
 
     public static final String APP_ID = "10002784";
     public static final String SECRET_ID = "AKIDFb4p8doJtrnfgieKpQlvEV0BE4Sa6F6Z";
     public static final String SECRET_KEY = "cEScbaS7MrKs7boBnKW06PUnpn4ET1P6";
+    private final String LOG_TAG = MainActivity.class.getName();
     private Bitmap theSelectedImage = null;
-    private  BitmapFactory.Options opts = null;
+    private BitmapFactory.Options opts = null;
+    private Button mLocalPicButton;
+    private Button mremotePicButton;
 
 
 
@@ -35,8 +45,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = (Button)findViewById(R.id.localTest);
-        button.setOnClickListener(new Button.OnClickListener() {
+        mLocalPicButton = (Button)findViewById(R.id.localTest);
+        mremotePicButton = (Button)findViewById(R.id.remoteTest);
+        opts = new BitmapFactory.Options();
+        opts.inDensity = this.getResources().getDisplayMetrics().densityDpi;
+        opts.inTargetDensity = this.getResources().getDisplayMetrics().densityDpi;
+
+
+        mLocalPicButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -45,8 +61,7 @@ public class MainActivity extends Activity {
                 startActivityForResult(intent, 1);
             }
         });
-        button = (Button)findViewById(R.id.remoteTest);
-        button.setOnClickListener(new Button.OnClickListener() {
+        mremotePicButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new Thread(new Runnable() {
@@ -55,7 +70,7 @@ public class MainActivity extends Activity {
                         try {
                             Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
                             JSONObject respose = faceYoutu.FaceCompareUrl("http://open.youtu.qq.com/content/img/slide-1.jpg", "http://open.youtu.qq.com/content/img/slide-1.jpg");
-                            System.out.println(respose);
+                            Log.d(LOG_TAG, respose.toString());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -64,89 +79,70 @@ public class MainActivity extends Activity {
             }
         });
 
-        opts = new BitmapFactory.Options();
-        opts.inDensity = this.getResources().getDisplayMetrics().densityDpi;
-        opts.inTargetDensity = this.getResources().getDisplayMetrics().densityDpi;
-
-        testcase1();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Context context = getApplicationContext();
-//                testcase2 case2 = new testcase2();
-//                case2.tasecase2(context);
-//            }
-//        }).start();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Context context = getApplicationContext();
-//                testcase3 case3 = new testcase3();
-//                case3.testcase3(context);
-//            }
-//        }).start();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Context context = getApplicationContext();
-//                testcase4 case4 = new testcase4();
-//                case4.testcase4(context);
-//            }
-//        }).start();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Context context = getApplicationContext();
-//                testcase5 case5 = new testcase5();
-//                case5.testcase5(context);
-//            }
-//        }).start();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Context context = getApplicationContext();
-//                testcase6 case6 = new testcase6();
-//                case6.testcase6(context);
-//            }
-//        }).start();
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Context context = getApplicationContext();
-//                fuzzycase_etc fuzzycase_etc = new fuzzycase_etc();
-//                fuzzycase_etc.fuzzycase_etc(context);
-//            }
-//        }).start();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                fuzzycase_etc_url case_url = new fuzzycase_etc_url();
-//                case_url.fuzzycase_etc_url();
-//            }
-//        }).start();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                testcase7_url case7 = new testcase7_url();
-//                case7.testcase7_url();
-//            }
-//        }).start();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                testcase8_url case8 = new testcase8_url();
-//                case8.testcase8_url();
-//            }
-//        }).start();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                testcase9_url case9 = new testcase9_url();
-//                case9.testcase9_url();
-//            }
-//        }).start();
+        testImageOcr();
+//        testcase1();
     }
+
+    void testImage(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, API_TENCENTYUN_END_POINT);
+//                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
+                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, "http://10.198.5.146/youtu/");
+
+                try {
+                    Log.d(LOG_TAG, "=====================================");
+                    Log.d(LOG_TAG, "imagePorn");
+                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.id, opts);
+                    JSONObject respose = faceYoutu.ImagePorn(selectedImage);
+                    Log.d(LOG_TAG, respose.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    void testImageOcr() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, API_TENCENTYUN_END_POINT);
+//                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
+                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, "http://101.226.76.164:18082/youtu/");
+
+                try {
+                    Log.d(LOG_TAG, "=====================================");
+                    Log.d(LOG_TAG, "idcardocr");
+                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.id, opts);
+                    JSONObject respose = faceYoutu.IdcardOcr(selectedImage, 0);
+                    Log.d(LOG_TAG, respose.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Log.d(LOG_TAG, "=====================================");
+                    Log.d(LOG_TAG, "namecardocr");
+                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.namecard, opts);
+                    JSONObject respose = faceYoutu.NamecardOcr(selectedImage);
+                    Log.d(LOG_TAG, respose.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
 
     void testcase1() {
         new Thread(new Runnable() {
@@ -209,262 +205,317 @@ public class MainActivity extends Activity {
 
                 try {
 
-                    System.out.println("=====================================");
-                    System.out.println("detectFace");
-                    System.out.println("-------------------------------------");
-                    System.out.println("detect face mode 0");
+                    Log.d(LOG_TAG, "=====================================");
+                    Log.d(LOG_TAG, "detectFace");
+                    Log.d(LOG_TAG, "-------------------------------------");
+                    Log.d(LOG_TAG, "detect face mode 0");
                     Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_1, opts);
                     JSONObject respose = faceYoutu.DetectFace(selectedImage, 0);
-                    System.out.println(respose);
-                    selectedImage.recycle();
+                    Log.d(LOG_TAG, respose.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 try {
 
-                    System.out.println("-------------------------------------");
-                    System.out.println("detect face mode 1");
+                    Log.d(LOG_TAG, "-------------------------------------");
+                    Log.d(LOG_TAG, "detect face mode 1");
                     Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_1, opts);
                     JSONObject respose = faceYoutu.DetectFace(selectedImage, 1);
-                    System.out.println(respose);
-                    selectedImage.recycle();
+                    Log.d(LOG_TAG, respose.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 try {
 
-                    System.out.println("-------------------------------------");
-                    System.out.println("detect multiface mode 0");
+                    Log.d(LOG_TAG, "-------------------------------------");
+                    Log.d(LOG_TAG, "detect multiface mode 0");
                     Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.nose_tip_871_254, opts);
                     JSONObject respose = faceYoutu.DetectFace(selectedImage, 0);
                     // get respose
-                    System.out.println(respose);
-                    selectedImage.recycle();
+                    Log.d(LOG_TAG, respose.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 try {
 
-                    System.out.println("-------------------------------------");
-                    System.out.println("detect multiface mode 1");
+                    Log.d(LOG_TAG, "-------------------------------------");
+                    Log.d(LOG_TAG, "detect multiface mode 1");
                     Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.multi2, opts);
                     JSONObject respose = faceYoutu.DetectFace(selectedImage, 1);
                     // get respose
-                    System.out.println(respose);
-                    selectedImage.recycle();
+                    Log.d(LOG_TAG, respose.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 try {
 
-                    System.out.println("-------------------------------------");
-                    System.out.println("detect noface mode 0");
+                    Log.d(LOG_TAG, "-------------------------------------");
+                    Log.d(LOG_TAG, "detect noface mode 0");
                     Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.noface, opts);
                     JSONObject respose = faceYoutu.DetectFace(selectedImage, 0);
                     // get respose
-                    System.out.println(respose);
-                    selectedImage.recycle();
+                    Log.d(LOG_TAG, respose.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 try {
 
-                    System.out.println("-------------------------------------");
-                    System.out.println("detect face image is illegal");
+                    Log.d(LOG_TAG, "-------------------------------------");
+                    Log.d(LOG_TAG, "detect face image is illegal");
                     Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.broken1, opts);
                     JSONObject respose = faceYoutu.DetectFace(selectedImage, 0);
                     // get respose
-                    System.out.println(respose);
+                    Log.d(LOG_TAG, respose.toString());
 
                     Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.broken2, opts);
                     JSONObject ret2 = faceYoutu.DetectFace(selectedImage2, 0);
-                    System.out.println(ret2);
+                    Log.d(LOG_TAG, ret2.toString());
 
                     Bitmap selectedImage3 = BitmapFactory.decodeResource(getResources(), R.drawable.bad, opts);
                     JSONObject ret3 = faceYoutu.DetectFace(selectedImage3, 0);
-                    System.out.println(ret3);
-                    selectedImage.recycle();
-                    selectedImage2.recycle();
-                    selectedImage3.recycle();
+                    Log.d(LOG_TAG, ret3.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
+                    if(null != selectedImage2) {
+                        selectedImage2.recycle();
+                    }
+                    if(null != selectedImage3){
+                        selectedImage3.recycle();
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//
-//                try {
-//
-//                    System.out.println("=====================================");
-//                    System.out.println("faceshape");
-//                    System.out.println("-------------------------------------");
-//                    System.out.println("faceshape mode 0");
-//                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, , opts);
-//                    JSONObject respose = faceYoutu.FaceShape(selectedImage, 0);
-//                    // get respose
-//                    System.out.println(respose);
-//                    selectedImage.recycle();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//                try {
-//
-//                    System.out.println("-------------------------------------");
-//                    System.out.println("FaceShape mode 1");
-//                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
-//                    JSONObject respose = faceYoutu.FaceShape(selectedImage, 1);
-//                    // get respose
-//                    System.out.println(respose);
-//                    selectedImage.recycle();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//        try {
-//
-//            System.out.println("-------------------------------------");
-//            System.out.println("shape multiface mode 0");
-//            Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.multi2, opts);;
-//            JSONObject respose = faceYoutu.FaceShape(selectedImage, 0);
-//            // get respose
-//            System.out.println(respose);
-//            selectedImage.recycle();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//
-//            System.out.println("-------------------------------------");
-//            System.out.println("shape multiface mode 1");
-//            Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.multi2, opts);
-//            JSONObject respose = faceYoutu.FaceShape(selectedImage, 1);
-//            // get respose
-//            System.out.println(respose);
-//            selectedImage.recycle();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//
-//            System.out.println("-------------------------------------");
-//            System.out.println("shape noface mode 0");
-//            Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.noface, opts);
-//            JSONObject respose = faceYoutu.FaceShape(selectedImage, 0);
-//            // get respose
-//            System.out.println(respose);
-//            selectedImage.recycle();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//
-//            System.out.println("-------------------------------------");
-//            System.out.println("shape face image is illegal");
-//            Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.broken1, opts);
-//            JSONObject respose = faceYoutu.FaceShape(selectedImage, 0);
-//            System.out.println(respose);
-//
-//            Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.broken2, opts);
-//            JSONObject ret2 = faceYoutu.FaceShape(selectedImage2, 0);
-//            System.out.println(ret2);
-//
-//            Bitmap selectedImage3 = BitmapFactory.decodeResource(getResources(), R.drawable.bad, opts);
-//            JSONObject ret3 = faceYoutu.FaceShape(selectedImage3, 0);
-//            System.out.println(ret3);
-//            selectedImage.recycle();
-//            selectedImage2.recycle();
-//            selectedImage3.recycle();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-        try {
 
-            System.out.println("=====================================");
-            System.out.println("FaceCompare");
-            System.out.println("-------------------------------------");
-            System.out.println("FaceCompare both face only one");
-            Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
-            Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_1, opts);
-            ;
-            JSONObject respose = faceYoutu.FaceCompare(selectedImage, selectedImage2);
-            System.out.println(respose);
-            selectedImage.recycle();
-            selectedImage2.recycle();
+                try {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                    Log.d(LOG_TAG, "=====================================");
+                    Log.d(LOG_TAG, "faceshape");
+                    Log.d(LOG_TAG, "-------------------------------------");
+                    Log.d(LOG_TAG, "faceshape mode 0");
+                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2 , opts);
+                    JSONObject respose = faceYoutu.FaceShape(selectedImage, 0);
+                    // get respose
+                    Log.d(LOG_TAG, respose.toString());
 
-        try {
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-            System.out.println("-------------------------------------");
-            System.out.println("FaceCompare A multiface face B multiface");
-            Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.multi2, opts);
-            Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.multi3, opts);
+                try {
 
-            JSONObject respose = faceYoutu.FaceCompare(selectedImage, selectedImage2);
-            // get respose
-            System.out.println(respose);
-            selectedImage.recycle();
-            selectedImage2.recycle();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                    Log.d(LOG_TAG, "-------------------------------------");
+                    Log.d(LOG_TAG, "FaceShape mode 1");
+                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
+                    JSONObject respose = faceYoutu.FaceShape(selectedImage, 1);
+                    // get respose
+                    Log.d(LOG_TAG, respose.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-        try {
+            try {
 
-            System.out.println("-------------------------------------");
-            System.out.println("FaceCompare A face B no");
-            Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
-            Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.noface, opts);
+                Log.d(LOG_TAG, "-------------------------------------");
+                Log.d(LOG_TAG, "shape multiface mode 0");
+                Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.multi2, opts);;
+                JSONObject respose = faceYoutu.FaceShape(selectedImage, 0);
+                // get respose
+                Log.d(LOG_TAG, respose.toString());
+                if(null != selectedImage) {
+                    selectedImage.recycle();
+                }
 
-            JSONObject respose = faceYoutu.FaceCompare(selectedImage, selectedImage2);
-            // get respose
-            System.out.println(respose);
-            selectedImage.recycle();
-            selectedImage2.recycle();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-
-            System.out.println("-------------------------------------");
-            System.out.println("FaceCompare A face B broken");
-            Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
-            Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.broken1, opts);
-            JSONObject respose = faceYoutu.FaceCompare(selectedImage, selectedImage2);
-            // get respose
-            System.out.println(respose);
-
-            Bitmap selectedImage3= BitmapFactory.decodeResource(getResources(), R.drawable.broken2, opts);
-            JSONObject ret2 = faceYoutu.FaceCompare(selectedImage, selectedImage3);
-            System.out.println(ret2);
-
-            Bitmap selectedImage4 = BitmapFactory.decodeResource(getResources(), R.drawable.bad, opts);
-            JSONObject ret3 = faceYoutu.FaceCompare(selectedImage, selectedImage4);
-            System.out.println(ret3);
-//            selectedImage.recycle();
-//            selectedImage2.recycle();
-//            selectedImage3.recycle();
-//            selectedImage4.recycle();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }).start();
+
+            try {
+
+                Log.d(LOG_TAG, "-------------------------------------");
+                Log.d(LOG_TAG, "shape multiface mode 1");
+                Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.multi2, opts);
+                JSONObject respose = faceYoutu.FaceShape(selectedImage, 1);
+                // get respose
+                Log.d(LOG_TAG, respose.toString());
+                if(null != selectedImage) {
+                    selectedImage.recycle();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                Log.d(LOG_TAG, "-------------------------------------");
+                Log.d(LOG_TAG, "shape noface mode 0");
+                Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.noface, opts);
+                JSONObject respose = faceYoutu.FaceShape(selectedImage, 0);
+                // get respose
+                Log.d(LOG_TAG, respose.toString());
+                if(null != selectedImage) {
+                    selectedImage.recycle();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                Log.d(LOG_TAG, "-------------------------------------");
+                Log.d(LOG_TAG, "shape face image is illegal");
+                Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.broken1, opts);
+                JSONObject respose = faceYoutu.FaceShape(selectedImage, 0);
+                Log.d(LOG_TAG, respose.toString());
+
+                Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.broken2, opts);
+                JSONObject ret2 = faceYoutu.FaceShape(selectedImage2, 0);
+                Log.d(LOG_TAG, ret2.toString());
+
+                Bitmap selectedImage3 = BitmapFactory.decodeResource(getResources(), R.drawable.bad, opts);
+                JSONObject ret3 = faceYoutu.FaceShape(selectedImage3, 0);
+                Log.d(LOG_TAG, ret3.toString());
+                if(null != selectedImage) {
+                    selectedImage.recycle();
+                }
+                if(null != selectedImage2) {
+                    selectedImage2.recycle();
+                }
+                if(null != selectedImage3){
+                    selectedImage3.recycle();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                Log.d(LOG_TAG, "=====================================");
+                Log.d(LOG_TAG, "FaceCompare");
+                Log.d(LOG_TAG, "-------------------------------------");
+                Log.d(LOG_TAG, "FaceCompare both face only one");
+                Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
+                Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_1, opts);
+                ;
+                JSONObject respose = faceYoutu.FaceCompare(selectedImage, selectedImage2);
+                Log.d(LOG_TAG, respose.toString());
+                if(null != selectedImage) {
+                    selectedImage.recycle();
+                }
+                if(null != selectedImage2) {
+                    selectedImage2.recycle();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                Log.d(LOG_TAG, "-------------------------------------");
+                Log.d(LOG_TAG, "FaceCompare A multiface face B multiface");
+                Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.multi2, opts);
+                Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.multi3, opts);
+
+                JSONObject respose = faceYoutu.FaceCompare(selectedImage, selectedImage2);
+                // get respose
+                Log.d(LOG_TAG, respose.toString());
+                if(null != selectedImage) {
+                    selectedImage.recycle();
+                }
+                if(null != selectedImage2) {
+                    selectedImage2.recycle();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                Log.d(LOG_TAG, "-------------------------------------");
+                Log.d(LOG_TAG, "FaceCompare A face B no");
+                Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
+                Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.noface, opts);
+
+                JSONObject respose = faceYoutu.FaceCompare(selectedImage, selectedImage2);
+                // get respose
+                Log.d(LOG_TAG, respose.toString());
+                if(null != selectedImage) {
+                    selectedImage.recycle();
+                }
+                if(null != selectedImage2) {
+                    selectedImage2.recycle();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                Log.d(LOG_TAG, "-------------------------------------");
+                Log.d(LOG_TAG, "FaceCompare A face B broken");
+                Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
+                Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.broken1, opts);
+                JSONObject respose = faceYoutu.FaceCompare(selectedImage, selectedImage2);
+                // get respose
+                Log.d(LOG_TAG, respose.toString());
+
+                Bitmap selectedImage3= BitmapFactory.decodeResource(getResources(), R.drawable.broken2, opts);
+                JSONObject ret2 = faceYoutu.FaceCompare(selectedImage, selectedImage3);
+                Log.d(LOG_TAG, ret2.toString());
+
+                Bitmap selectedImage4 = BitmapFactory.decodeResource(getResources(), R.drawable.bad, opts);
+                JSONObject ret3 = faceYoutu.FaceCompare(selectedImage, selectedImage4);
+                Log.d(LOG_TAG, ret3.toString());
+                if(null != selectedImage) {
+                    selectedImage.recycle();
+                }
+                if(null != selectedImage2) {
+                    selectedImage2.recycle();
+                }
+                if(null != selectedImage3) {
+                    selectedImage3.recycle();
+                }
+                if(null != selectedImage4) {
+                    selectedImage4.recycle();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+                }
+            }).start();
     }
 
 
@@ -474,7 +525,7 @@ public class MainActivity extends Activity {
             Uri uri = data.getData();
             Log.e("uri", uri.toString());
             try {
-                String path = uri2Path(uri);
+                String path = getPath(uri);
                 theSelectedImage = getBitmap(path, 1000, 1000);
                 new Thread(new Runnable() {
                     @Override
@@ -483,7 +534,7 @@ public class MainActivity extends Activity {
                             try {
                                 Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT);
                                 JSONObject respose = faceYoutu.DetectFace(theSelectedImage, 1);
-                                System.out.println(respose);
+                                Log.d(LOG_TAG, respose.toString());
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -520,33 +571,184 @@ public class MainActivity extends Activity {
     }
 
     public String uri2Path(Uri uri) {
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String path = cursor.getString(1);
-        cursor.close();
+        String path = null;
+        if(uri == null) {
+            return path;
+        }
+
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        if(!isKitKat) {
+            //android 版本小于4.4
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            if(null != cursor) {
+                cursor.moveToFirst();
+                path = cursor.getString(1);
+                cursor.close();
+            }
+        }else{
+            //android 版本大于等于4.4
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(":");
+            final String type = split[0];
+
+            Uri contentUri = null;
+            if ("image".equals(type)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            }
+
+            final String selection = "_id=?";
+            final String[] selectionArgs = new String[] { split[1] };
+
+            path =  getDataColumn(this, contentUri, selection, selectionArgs);
+
+        }
         return path;
+    }
+
+
+    public String getPath( final Uri uri) {
+
+        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+        // DocumentProvider
+        if (isKitKat && DocumentsContract.isDocumentUri(this, uri)) {
+            // ExternalStorageProvider
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
+
+            }
+            // DownloadsProvider
+            else if (isDownloadsDocument(uri)) {
+
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(this, contentUri, null, null);
+            }
+            // MediaProvider
+            else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{split[1]};
+
+                return getDataColumn(this, contentUri, selection, selectionArgs);
+            }
+        }
+        // MediaStore (and general)
+        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+            // Return the remote address
+            if (isGooglePhotosUri(uri))
+                return uri.getLastPathSegment();
+
+            return getDataColumn(this, uri, null, null);
+        }
+        // File
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is DownloadsProvider.
+     */
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+
+    private static String getDataColumn(Context context, Uri uri, String selection,
+                                       String[] selectionArgs) {
+
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = { column };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
     }
 
     private Bitmap getBitmap(String path , int maxWidth, int maxHeight){
         //先解析图片边框的大小
-        BitmapFactory.Options ops = new BitmapFactory.Options();
-        ops.inJustDecodeBounds = true;
-        ops.inSampleSize = 1;
-        int oHeight = ops.outHeight;
-        int oWidth = ops.outWidth;
+        Bitmap bm = null;
+        File file = new File(path);
+        if(file.exists()) {
+            BitmapFactory.Options ops = new BitmapFactory.Options();
+            ops.inJustDecodeBounds = true;
+            ops.inSampleSize = 1;
+            BitmapFactory.decodeFile(path, ops);
+            int oHeight = ops.outHeight;
+            int oWidth = ops.outWidth;
 
-        //控制压缩比
-        int contentHeight = maxWidth;
-        int contentWidth = maxHeight;
-        if(((float)oHeight/contentHeight) < ((float)oWidth/contentWidth)){
-            ops.inSampleSize = (int) Math.ceil((float)oWidth/contentWidth);
-        }else{
-            ops.inSampleSize = (int) Math.ceil((float)oHeight/contentHeight);
+            //控制压缩比
+            int contentHeight = maxWidth;
+            int contentWidth = maxHeight;
+            if (((float) oHeight / contentHeight) < ((float) oWidth / contentWidth)) {
+                ops.inSampleSize = (int) Math.ceil((float) oWidth / contentWidth);
+            } else {
+                ops.inSampleSize = (int) Math.ceil((float) oHeight / contentHeight);
+            }
+            ops.inJustDecodeBounds = false;
+            bm = BitmapFactory.decodeFile(path, ops);
+
         }
-        ops.inJustDecodeBounds = false;
-        Bitmap bm = BitmapFactory.decodeFile(path, ops);
+
         return bm;
     }
 
 
 }
+
+
+
