@@ -68,9 +68,16 @@ public class MainActivity extends Activity {
                     @Override
                     public void run() {
                         try {
+//                            Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
+//                            JSONObject respose = faceYoutu.FaceCompareUrl("http://open.youtu.qq.com/content/img/slide-1.jpg", "http://open.youtu.qq.com/content/img/slide-1.jpg");
+//                            Log.d(LOG_TAG, respose.toString());
                             Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
-                            JSONObject respose = faceYoutu.FaceCompareUrl("http://open.youtu.qq.com/content/img/slide-1.jpg", "http://open.youtu.qq.com/content/img/slide-1.jpg");
+                            Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.cccard, opts);
+                            JSONObject respose = faceYoutu.FaceShape(selectedImage,1);
                             Log.d(LOG_TAG, respose.toString());
+                            if(null != selectedImage) {
+                                selectedImage.recycle();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
