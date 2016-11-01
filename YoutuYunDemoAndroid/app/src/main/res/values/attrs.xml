@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="youtuattrs">
+        <attr name="cameraPosition">
+            <flag name="front" value="0" />
+            <flag name="back" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>

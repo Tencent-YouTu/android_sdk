@@ -28,13 +28,30 @@
         android:layout_below="@+id/localTest"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:id="@+id/enterFaceIn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:text="人脸核身进入"
+        android:textColor="#FFFFFFFF"
+        android:textSize="18sp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/bt_blue"
+        android:layout_below="@+id/remoteTest" />
+
+
     <TextView
+        android:id="@+id/warning"
+        android:text="注意:使用之前请在Config.java文件里设置自己申请的 APP_ID, SECRET_ID, SECRET_KEY"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/remoteTest"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp" />
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentBottom="true"
+        />
+
 
 </RelativeLayout>

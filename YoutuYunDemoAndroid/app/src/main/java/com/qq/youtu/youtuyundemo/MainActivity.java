@@ -21,22 +21,40 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.common.Config;
+import com.common.LoadingDialog;
+import com.common.YTServerAPI;
+import com.facein.CardVideoActivity;
 import com.youtu.Youtu;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
+
+/*
+* demo展示如何调用优图开放平台API接口，网络请求返回的数据以log形式展示，请开发者用Android studio查看，
+* 具体的接口协议请参考：http://open.youtu.qq.com。
+*
+* 请在Config.java里设置自己申请的 APP_ID, SECRET_ID, SECRET_KEY,否则网络请求签名验证会出错。
+*
+*
+*/
 
 public class MainActivity extends Activity {
-
-    public static final String APP_ID = "10002784";
-    public static final String SECRET_ID = "AKIDFb4p8doJtrnfgieKpQlvEV0BE4Sa6F6Z";
-    public static final String SECRET_KEY = "cEScbaS7MrKs7boBnKW06PUnpn4ET1P6";
     private final String LOG_TAG = MainActivity.class.getName();
     private Bitmap theSelectedImage = null;
     private BitmapFactory.Options opts = null;
     private Button mLocalPicButton;
     private Button mremotePicButton;
+    private Button mEnterFaceIn;
+    private YTServerAPI mServerAPI;
+    private LoadingDialog mLoadingDialog;
+
+    private String APP_ID = "";
+    private String SECRET_ID = "";
+    private String SECRET_KEY = "";
 
 
 
@@ -45,8 +63,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        APP_ID = Config.APP_ID;
+        SECRET_ID = Config.SECRET_ID;
+        SECRET_KEY = Config.SECRET_KEY;
+
         mLocalPicButton = (Button)findViewById(R.id.localTest);
         mremotePicButton = (Button)findViewById(R.id.remoteTest);
+        mEnterFaceIn = (Button)findViewById(R.id.enterFaceIn);
         opts = new BitmapFactory.Options();
         opts.inDensity = this.getResources().getDisplayMetrics().densityDpi;
         opts.inTargetDensity = this.getResources().getDisplayMetrics().densityDpi;
@@ -61,6 +84,7 @@ public class MainActivity extends Activity {
                 startActivityForResult(intent, 1);
             }
         });
+
         mremotePicButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,8 +110,143 @@ public class MainActivity extends Activity {
             }
         });
 
-        testImageOcr();
-//        testcase1();
+        mEnterFaceIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CardVideoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        testFaceIn();
+//        testImageOcr();
+    }
+
+    void testFaceIn(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_VIP_END_POINT);
+
+                //IdcardOcrVIP
+                try {
+                    Log.d(LOG_TAG, "=====================================");
+                    Log.d(LOG_TAG, "IdcardOcrVIP");
+                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.id, opts);
+                    JSONObject respose = faceYoutu.IdcardOcrVIP(selectedImage, 0);
+                    Log.d(LOG_TAG, respose.toString());
+                    if(null != selectedImage) {
+                        selectedImage.recycle();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //FaceCompareVip
+
+//                try {
+//                    Log.d(LOG_TAG, "=====================================");
+//                    Log.d(LOG_TAG, "FaceCompareVip");
+//                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
+//                    Bitmap selectedImage2 = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_1, opts);
+//                    JSONObject respose = faceYoutu.FaceCompareVip(selectedImage, selectedImage2);
+//                    Log.d(LOG_TAG, respose.toString());
+//                    if(null != selectedImage) {
+//                        selectedImage.recycle();
+//                    }
+//                    if(null != selectedImage2) {
+//                        selectedImage2.recycle();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+               //IdcardFaceCompare
+
+//                try {
+//                    Log.d(LOG_TAG, "=====================================");
+//                    Log.d(LOG_TAG, "IdcardFaceCompare");
+//                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
+//                    JSONObject respose = faceYoutu.IdcardFaceCompare(selectedImage, "张三", "123456789012121234");
+//                    Log.d(LOG_TAG, respose.toString());
+//                    if(null != selectedImage) {
+//                        selectedImage.recycle();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+
+                //LivegetFour
+//                try {
+//                    Log.d(LOG_TAG, "=====================================");
+//                    Log.d(LOG_TAG, "LivegetFour");
+//                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
+//                    JSONObject respose = faceYoutu.LivegetFour();
+//                    Log.d(LOG_TAG, respose.toString());
+//                    if(null != selectedImage) {
+//                        selectedImage.recycle();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+                //LiveDetectFour
+//                try {
+//                    Log.d(LOG_TAG, "=====================================");
+//                    Log.d(LOG_TAG, "LiveDetectFour");
+//
+//                    InputStream stream = getResources().openRawResource(R.raw.video);
+//                    ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
+//                    byte[] b = new byte[1000];
+//                    int n;
+//                    while ((n = stream.read(b)) != -1)
+//                        out.write(b, 0, n);
+//                    stream.close();
+//                    out.close();
+//
+//                    final byte[] vedioByte = out.toByteArray();
+//                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
+//                    JSONObject respose = faceYoutu.LiveDetectFour(vedioByte ,selectedImage, "3388", true);
+//                    Log.d(LOG_TAG, respose.toString());
+//                    if(null != selectedImage) {
+//                        selectedImage.recycle();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+
+                //IdcardLiveDetectFour
+//                try {
+//                    Log.d(LOG_TAG, "=====================================");
+//                    Log.d(LOG_TAG, "IdcardLiveDetectFour");
+//
+//                    InputStream stream = getResources().openRawResource(R.raw.video);
+//                    ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
+//                    byte[] b = new byte[1000];
+//                    int n;
+//                    while ((n = stream.read(b)) != -1)
+//                        out.write(b, 0, n);
+//                    stream.close();
+//                    out.close();
+//
+//                    final byte[] vedioByte = out.toByteArray();
+//                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_2, opts);
+//                    JSONObject respose = faceYoutu.IdcardLiveDetectFour(vedioByte ,"3388", "张三", "123456789012121234");
+//                    Log.d(LOG_TAG, respose.toString());
+//                    if(null != selectedImage) {
+//                        selectedImage.recycle();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+
+
+            }
+        }).start();
     }
 
     void testImage(){
@@ -95,8 +254,8 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 //Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, API_TENCENTYUN_END_POINT);
-//                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
-                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, "http://10.198.5.146/youtu/");
+                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
+                //               Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, "http://10.198.5.146/youtu/");
 
                 try {
                     Log.d(LOG_TAG, "=====================================");
@@ -119,8 +278,8 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 //Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, API_TENCENTYUN_END_POINT);
-//                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
-                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, "http://101.226.76.164:18082/youtu/");
+                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
+//                Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, "http://101.226.76.164:18082/youtu/");
 
                 try {
                     Log.d(LOG_TAG, "=====================================");
@@ -647,7 +806,7 @@ public class MainActivity extends Activity {
                 Uri contentUri = null;
                 if ("image".equals(type)) {
                     contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
+                } else if ("raw".equals(type)) {
                     contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
                 } else if ("audio".equals(type)) {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;

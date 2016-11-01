@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="50dp"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:gravity="left"
+        android:text="确认身份信息"/>
+
+    <LinearLayout
+        android:id="@+id/nameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/title"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp">
+        <TextView
+            android:id="@+id/nameLable"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="left"
+            android:text="姓名"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="left"
+            android:text="张三"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/idLayout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/nameLayout"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:id="@+id/idLable"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="left"
+            android:text="身份证"/>
+
+        <TextView
+            android:id="@+id/idCard"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="left"
+            android:text="11111"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="150dp"
+        android:text="确定"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:background="@drawable/bt_blue"/>
+
+
+
+</RelativeLayout>

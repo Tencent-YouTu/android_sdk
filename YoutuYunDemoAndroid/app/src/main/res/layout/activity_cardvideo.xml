@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:youtu="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.facein.CameraPreview
+            android:id="@+id/camPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            youtu:cameraPosition="back"/>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/idCardBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/idcard_back"
+        android:scaleType="centerCrop"
+        />
+
+    <ImageView
+        android:id="@+id/idCaradFirst"
+        android:layout_width="283dp"
+        android:layout_height="179dp"
+        android:layout_marginTop="155dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/idcard_first"/>
+
+    <ImageView
+        android:id="@+id/idCaradSecond"
+        android:layout_width="283dp"
+        android:layout_height="179dp"
+        android:layout_marginTop="155dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/idcard_second"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idCaradFirst"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp">
+        <ImageView
+            android:id="@+id/indicatorLeft"
+            android:layout_width="140dp"
+            android:layout_height="4dp"
+            android:src="@drawable/indicator_nor"/>
+
+        <ImageView
+            android:id="@+id/indicatorRight"
+            android:layout_width="140dp"
+            android:layout_height="4dp"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/indicator_nor"/>
+
+
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/warningText"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginTop="100dp"
+        />
+
+    <TextView
+        android:id="@+id/errorText"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_above="@+id/idCaradFirst"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="120dp"
+        />
+
+
+    <Button
+        android:id="@+id/startPic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/camera_button"/>
+
+</RelativeLayout>
+
