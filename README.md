@@ -17,13 +17,13 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
   3. 请联系我们
 
 ##名词：
-• AppId 平台添加应用后分配的AppId
-• SecretId 平台添加应用后分配的SecretId
-• SecretKey 平台添加应用后分配的SecretKey
-• 签名 接口鉴权凭证，由AppId、SecretId、SecretKey等生成，详见	http://open.youtu.qq.com/welcome/new-authentication
+- AppId 平台添加应用后分配的AppId
+- SecretId 平台添加应用后分配的SecretId
+- SecretKey 平台添加应用后分配的SecretKey
+- 签名 接口鉴权凭证，由AppId、SecretId、SecretKey等生成，详见	http://open.youtu.qq.com/welcome/new-authentication
 
-##接口说明：
-	Youtu 构造方法
+##接口说明
+	###Youtu 构造方法
 	public Youtu(String appid, String secret_id, String secret_key,String end_point);
 	参数：
 	appid 授权appid
