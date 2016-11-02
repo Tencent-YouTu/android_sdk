@@ -15,6 +15,22 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
   1. 阅读android SDK源码
   2. 在http://open.youtu.qq.com/welcome/developer#/api-summary 阅读发送参数、返回结果含义
   3. 请联系我们
+  
+##注意：
+	人脸核身相关接口，需要申请权限接入，具体参考http://open.youtu.qq.com/welcome/service#/solution-facecheck
+	人脸核身接口包括：
+		public JSONObject IdcardOcrVIP(Bitmap bitmap, int cardType) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException;
+		public JSONObject FaceCompareVip(Bitmap bitmapA, Bitmap bitmapB) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException
+		public JSONObject IdcardFaceCompare(Bitmap bitmap, String name, String idcard) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException ;
+		public JSONObject LivegetFour() throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException;
+		public JSONObject LiveDetectFour(byte[] video, Bitmap bitmap, String validateData, boolean isCompare) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException;
+		public JSONObject IdcardLiveDetectFour(byte[] video, String validateData, String name, String idcard) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException;
 
 ##名词：
 - AppId 平台添加应用后分配的AppId
