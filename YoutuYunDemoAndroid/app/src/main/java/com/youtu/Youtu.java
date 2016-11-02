@@ -935,7 +935,7 @@ public class Youtu {
 
 //facein 人脸核身
 	/*!
-	 * 身份证OCR识别
+	 * 身份证OCR识别 --人脸核身相关接口
 	 *
 	 * @param bitmap  输入图片
 	 * @param cardType 身份证图片类型，0-正面，1-反面
@@ -952,7 +952,7 @@ public class Youtu {
 	}
 
 	/*
-	 *静态人脸比对:用户自带数据源比对
+	 *静态人脸比对:用户自带数据源比对 --人脸核身相关接口
 	 * 人脸对比， 计算两个Face的相似性以及五官相似度。
 	 *
 	 * @param bitmapA 第一张人脸图片
@@ -975,7 +975,7 @@ public class Youtu {
 	}
 
 	/*!
-	 * 静态人脸比对:使用优图数据源比对
+	 * 静态人脸比对:使用优图数据源比对 --人脸核身相关接口
 	 *
 	 * @param idcard  用户身份证号码
 	 * @param name  用户身份证姓名
@@ -996,7 +996,7 @@ public class Youtu {
 
 
 	/*
-	*唇语获取
+	*唇语获取 --人脸核身相关接口
 	*
 	*/
 	public JSONObject LivegetFour() throws  IOException,
@@ -1010,7 +1010,7 @@ public class Youtu {
 	}
 
 	/*!
-	 * 视频人脸核身:用户自带数据源核身
+	 * 视频人脸核身:用户自带数据源核身 --人脸核身相关接口
 	 *
 	 * @param video 需要检测的视频base64编码
 	 * @param validateDat livegetfour得到的唇语验证数据
@@ -1034,7 +1034,7 @@ public class Youtu {
 	}
 
 	/*!
-	 * 视频人脸核身:使用优图数据源核身
+	 * 视频人脸核身:使用优图数据源核身 --人脸核身相关接口
 	 *
 	 * @param video 需要检测的视频base64编码
 	 * @param idcard 用户身份证号码

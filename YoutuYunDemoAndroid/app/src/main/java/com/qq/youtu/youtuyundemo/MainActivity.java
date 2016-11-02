@@ -40,6 +40,21 @@ import java.io.InputStream;
 * 请在Config.java里设置自己申请的 APP_ID, SECRET_ID, SECRET_KEY,否则网络请求签名验证会出错。
 *
 *
+*人脸核身相关接口，需要申请权限接入，具体参考http://open.youtu.qq.com/welcome/service#/solution-facecheck
+*人脸核身接口包括：
+*	public JSONObject IdcardOcrVIP(Bitmap bitmap, int cardType) throws  IOException,
+*			JSONException, KeyManagementException, NoSuchAlgorithmException;
+*	public JSONObject FaceCompareVip(Bitmap bitmapA, Bitmap bitmapB) throws  IOException,
+*			JSONException, KeyManagementException, NoSuchAlgorithmException
+*	public JSONObject IdcardFaceCompare(Bitmap bitmap, String name, String idcard) throws  IOException,
+*			JSONException, KeyManagementException, NoSuchAlgorithmException ;
+*	public JSONObject LivegetFour() throws  IOException,
+*			JSONException, KeyManagementException, NoSuchAlgorithmException;
+*	public JSONObject LiveDetectFour(byte[] video, Bitmap bitmap, String validateData, boolean isCompare) throws  IOException,
+*			JSONException, KeyManagementException, NoSuchAlgorithmException;
+*	public JSONObject IdcardLiveDetectFour(byte[] video, String validateData, String name, String idcard) throws  IOException,
+*			JSONException, KeyManagementException, NoSuchAlgorithmException;
+*
 */
 
 public class MainActivity extends Activity {
@@ -119,8 +134,9 @@ public class MainActivity extends Activity {
         });
 
 
-        testFaceIn();
-//        testImageOcr();
+
+        testImageOcr();
+        //testFaceIn();
     }
 
     void testFaceIn(){

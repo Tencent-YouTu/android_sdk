@@ -35,7 +35,9 @@ import javax.net.ssl.X509TrustManager;
 
 /**
  * 
- * @author tyronetao
+ * @author qingliang
+ *
+ * 人脸核身相关接口调用
  */
 public class YTServerAPI {
 	public final static String API_URL = "https://vip-api.youtu.qq.com/youtu/";
