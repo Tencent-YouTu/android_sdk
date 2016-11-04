@@ -38,6 +38,36 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
 - SecretKey 平台添加应用后分配的SecretKey
 - 签名 接口鉴权凭证，由AppId、SecretId、SecretKey等生成，详见	http://open.youtu.qq.com/welcome/new-authentication
 
+
+## 使用示例
+
+##### 设置APP 鉴权信息
+	Config.java里设置自己申请的 APP_ID, SECRET_ID, SECRET_KEY
+	public class Config {
+    	public static final String APP_ID = "your appId";   // 替换APP_ID
+    	public static final String SECRET_ID = "your secretId";  // 替换SECRET_ID
+    	public static final String SECRET_KEY = "your secretkey";// 替换SECRET_KEY
+	}
+	
+##### 根据你使用的平台选择一种初始化方式
+	优图开放平台初始化
+	Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
+
+	优图开放平台核身服务初始化（**核身服务目前仅支持核身专有接口,需要联系商务开通**）
+	Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_YOUTU_END_POINT);
+	
+##### 调用示例
+  	try {
+  		Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.geyou_1, opts);
+        JSONObject respose = faceYoutu.DetectFace(selectedImage, 0);
+        Log.d(LOG_TAG, respose.toString());
+        if(null != selectedImage) {
+                selectedImage.recycle();
+           }
+        } catch (Exception e) {
+              e.printStackTrace();
+        }
+
 ##接口说明
 
 	Youtu构造方法
@@ -46,6 +76,7 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
 	appid 授权appid
 	secret_id 授权secret_id
 	secret_key 授权secret_key
+	end_point  域名
 	
 	人脸属性分析 检测给定图片(Image)中的所有人脸(Face)的位置和相应的面部属性。位置包括(x, y, w, h)，
 	面部属性包括性别(gender), 年龄(age), 表情(expression), 眼镜(glass)和姿态(pitch，roll，yaw).
