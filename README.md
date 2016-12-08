@@ -81,7 +81,7 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
 	secret_key 授权secret_key
 	end_point  域名
 	
-#####开放平台API
+###开放平台API
 	人脸属性分析 检测给定图片(Image)中的所有人脸(Face)的位置和相应的面部属性。位置包括(x, y, w, h)，
 	面部属性包括性别(gender), 年龄(age), 表情(expression), 眼镜(glass)和姿态(pitch，roll，yaw).
 	public JSONObject DetectFace(Bitmap bitmap,int mode) throws IOException,
@@ -309,7 +309,7 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
 	url 输入图片url
 
 
-#####人脸核身接口说明
+###人脸核身接口说明
 	核身API访问域名为：https://vip-api.youtu.qq.com/，需要联系商务开通权限。
 
 
