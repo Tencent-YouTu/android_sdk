@@ -70,7 +70,7 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
 
 ##接口说明
 
-    ####接口分为开放平台免费接口和人脸核身接口，人脸核身接口访问权限需要联系商务开通；开放平台API访问域名为https://api.youtu.qq.com/， 核身API访问域名为https://vip-api.youtu.qq.com/
+####接口分为开放平台免费接口和人脸核身接口，人脸核身接口访问权限需要联系商务开通；开放平台API访问域名为https://api.youtu.qq.com/， 核身API访问域名为https://vip-api.youtu.qq.com/
 
 
 	Youtu构造方法
