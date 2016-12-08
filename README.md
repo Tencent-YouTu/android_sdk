@@ -79,7 +79,7 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
 	appid 授权appid
 	secret_id 授权secret_id
 	secret_key 授权secret_key
-	end_point  域名
+	end_point  域名（开放平台接口访问域名为：https://api.youtu.qq.com/，人脸核身接口访问域名为：https://vip-api.youtu.qq.com/）
 	
 ###开放平台免费接口
 	人脸属性分析 检测给定图片(Image)中的所有人脸(Face)的位置和相应的面部属性。位置包括(x, y, w, h)，
