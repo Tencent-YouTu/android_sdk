@@ -951,6 +951,22 @@ public class Youtu {
 		return response;
 	}
 
+	/*!
+ * 身份证实名认证 --人脸核身相关接口
+ *
+ * @param idcard_number  用户身份证号码
+ * @param idcard_name 	用户身份证姓名
+ */
+	public JSONObject IdcardNameVIP(String idNum, String idName) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("idcard_number", idNum);
+		data.put("idcard_name", idName);
+
+		JSONObject response = SendRequest(data, "openliveapi/validateidcard");
+		return response;
+	}
+
 	/*
 	 *静态人脸比对:用户自带数据源比对 --人脸核身相关接口
 	 * 人脸对比， 计算两个Face的相似性以及五官相似度。

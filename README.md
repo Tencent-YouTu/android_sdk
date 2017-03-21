@@ -21,6 +21,8 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
 	人脸核身接口包括：
 		public JSONObject IdcardOcrVIP(Bitmap bitmap, int cardType) throws  IOException,
 			JSONException, KeyManagementException, NoSuchAlgorithmException;
+		public JSONObject IdcardNameVIP(String idNum, String idName) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException;
 		public JSONObject FaceCompareVip(Bitmap bitmapA, Bitmap bitmapB) throws  IOException,
 			JSONException, KeyManagementException, NoSuchAlgorithmException
 		public JSONObject IdcardFaceCompare(Bitmap bitmap, String name, String idcard) throws  IOException,
@@ -82,6 +84,7 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
 	end_point  域名（开放平台接口访问域名为：https://api.youtu.qq.com/，人脸核身接口访问域名为：https://vip-api.youtu.qq.com/）
 	
 ###开放平台免费接口说明
+
 	人脸属性分析 检测给定图片(Image)中的所有人脸(Face)的位置和相应的面部属性。位置包括(x, y, w, h)，
 	面部属性包括性别(gender), 年龄(age), 表情(expression), 眼镜(glass)和姿态(pitch，roll，yaw).
 	public JSONObject DetectFace(Bitmap bitmap,int mode) throws IOException,
@@ -312,13 +315,19 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
 ###人脸核身接口说明
 ####人脸核身接口访问域名为：https://vip-api.youtu.qq.com/，需要联系商务开通权限。
 
-
 	身份证OCR识别
 	public JSONObject IdcardOcrVIP(Bitmap bitmap, int cardType) throws  IOException,
 			JSONException, KeyManagementException, NoSuchAlgorithmException;
 	参数
 	bitmap 输入图片
 	cardType 身份证图片类型，0-正面，1-反面
+	
+ 	身份证实名认证
+	public JSONObject IdcardNameVIP(String idNum, String idName) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException;
+	参数
+	idcard_number  用户身份证号码
+	idcard_name 	用户身份证姓名
 
 	静态人脸比对:用户自带数据源比对
 	public JSONObject FaceCompareVip(Bitmap bitmapA, Bitmap bitmapB) throws  IOException,

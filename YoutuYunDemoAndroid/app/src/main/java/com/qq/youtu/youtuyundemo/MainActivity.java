@@ -44,6 +44,10 @@ import java.io.InputStream;
 *人脸核身接口包括：
 *	public JSONObject IdcardOcrVIP(Bitmap bitmap, int cardType) throws  IOException,
 *			JSONException, KeyManagementException, NoSuchAlgorithmException;
+*	public JSONObject IdcardNameVIP(String idNum, String idName) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException
+*	public JSONObject IdcardNameVIP(String idNum, String idName) throws  IOException,
+			JSONException, KeyManagementException, NoSuchAlgorithmException
 *	public JSONObject FaceCompareVip(Bitmap bitmapA, Bitmap bitmapB) throws  IOException,
 *			JSONException, KeyManagementException, NoSuchAlgorithmException
 *	public JSONObject IdcardFaceCompare(Bitmap bitmap, String name, String idcard) throws  IOException,
@@ -135,8 +139,8 @@ public class MainActivity extends Activity {
 
 
 
-        testImageOcr();
-        //testFaceIn();
+//        testImageOcr();
+        testFaceIn();
     }
 
     void testFaceIn(){
@@ -146,18 +150,31 @@ public class MainActivity extends Activity {
                 Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, Youtu.API_VIP_END_POINT);
 
                 //IdcardOcrVIP
+//                try {
+//                    Log.d(LOG_TAG, "=====================================");
+//                    Log.d(LOG_TAG, "IdcardOcrVIP");
+//                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.id, opts);
+//                    JSONObject respose = faceYoutu.IdcardOcrVIP(selectedImage, 0);
+//                    Log.d(LOG_TAG, respose.toString());
+//                    if(null != selectedImage) {
+//                        selectedImage.recycle();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+                //IdcardNameVIP
                 try {
                     Log.d(LOG_TAG, "=====================================");
-                    Log.d(LOG_TAG, "IdcardOcrVIP");
-                    Bitmap selectedImage = BitmapFactory.decodeResource(getResources(), R.drawable.id, opts);
-                    JSONObject respose = faceYoutu.IdcardOcrVIP(selectedImage, 0);
+                    Log.d(LOG_TAG, "IdcardNameVIP");
+                    String idNumber = "341221199001011234";
+                    String idName = "李磊";
+                    JSONObject respose = faceYoutu.IdcardNameVIP(idNumber, idName);
                     Log.d(LOG_TAG, respose.toString());
-                    if(null != selectedImage) {
-                        selectedImage.recycle();
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
 
                 //FaceCompareVip
 
