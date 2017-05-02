@@ -184,7 +184,7 @@ public class CardVideoActivity extends Activity {
 
 
     private void uploadImage(){
-
+        //上传的图片大小不能超过2M，请开发者自行处理
         mLoading.setText("身份证识别中");
         mLoading.show();
         mPicButton.setEnabled(false);
@@ -255,7 +255,7 @@ public class CardVideoActivity extends Activity {
         InputStream input = null;
         Bitmap bitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 5;
+        options.inSampleSize = 2;   //上传的图片大小不能超过2M，请开发者自行处理
         input = new ByteArrayInputStream(imgByte);
         SoftReference softRef = new SoftReference(BitmapFactory.decodeStream(
                 input, null, options));
