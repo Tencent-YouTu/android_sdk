@@ -6,18 +6,18 @@ android SDK包含：
   1. 如何进行鉴权
   2. 如何对参数进行封装
 
-demo展示如何调用优图开放平台API接口，网络请求返回的数据以log形式展示，请开发者用Android studio查看，是根据 http://open.youtu.qq.com/welcome/developer#/api-summary 实现的。
+demo展示如何调用优图开放平台API接口，网络请求返回的数据以log形式展示，请开发者用Android studio查看，是根据 https://open.youtu.qq.com/#/open/developer/summary 实现的。
 
-请开发者根据自己的需求，按照SDK中实现方式，封装http://open.youtu.qq.com/welcome/developer#/api-summary 列出的API
+请开发者根据自己的需求，按照SDK中实现方式，封装https://open.youtu.qq.com/#/open/developer/summary 列出的API
 
 
 如果遇到问题，请按以下步骤解决：
   1. 阅读android SDK源码
-  2. 在http://open.youtu.qq.com/welcome/developer#/api-summary 阅读发送参数、返回结果含义
+  2. 在https://open.youtu.qq.com/#/open/developer/summary 阅读发送参数、返回结果含义
   3. 请联系我们
   
 ## 注意：
-	人脸核身相关接口，需要申请权限接入，具体参考http://open.youtu.qq.com/welcome/service#/solution-facecheck
+	人脸核身相关接口，需要申请权限接入，具体参考https://open.youtu.qq.com/#/open/solution/facein
 	人脸核身接口包括：
 		public JSONObject IdcardOcrVIP(Bitmap bitmap, int cardType) throws  IOException,
 			JSONException, KeyManagementException, NoSuchAlgorithmException;
@@ -38,7 +38,7 @@ demo展示如何调用优图开放平台API接口，网络请求返回的数据�
 - AppId 平台添加应用后分配的AppId
 - SecretId 平台添加应用后分配的SecretId
 - SecretKey 平台添加应用后分配的SecretKey
-- 签名 接口鉴权凭证，由AppId、SecretId、SecretKey等生成，详见	http://open.youtu.qq.com/welcome/new-authentication
+- 签名 接口鉴权凭证，由AppId、SecretId、SecretKey等生成，详见	https://open.youtu.qq.com/#/develop/tool-authentication/auth
 
 
 ## 使用示例
